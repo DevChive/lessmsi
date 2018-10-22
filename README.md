@@ -1,13 +1,19 @@
-lessmsi [![Build Status](https://secure.travis-ci.org/activescott/lessmsi.png?branch=master)](http://travis-ci.org/activescott/lessmsi) [![tip for next commit](http://tip4commit.com/projects/316.svg)](http://tip4commit.com/projects/316)
+lessmsi [![Build Status](https://ci.appveyor.com/api/projects/status/github/activescott/lessmsi?branch=master&svg=true)](https://ci.appveyor.com/project/activescott/lessmsi) [![tip for next commit](http://tip4commit.com/projects/316.svg)](http://tip4commit.com/projects/316) [![chocolatey](https://img.shields.io/chocolatey/v/lessmsi.svg?maxAge=2592000)](https://chocolatey.org/packages/lessmsi)
 ========
 
 This is a utility with a graphical user interface and a command line interface that can be used to view and extract the contents of an MSI file. 
 
+Usage
+========
 To extract from the command line:
 
      lessmsi x <msiFileName> [<outouptDir>]
 
 For more command line usage see [CommandLine](https://github.com/activescott/lessmsi/wiki/Command-Line).
+
+Installation
+========
+Install [via Chocolatey](https://chocolatey.org/packages/lessmsi) (or [download a zip](https://github.com/activescott/lessmsi/releases/latest)).
 
 Features
 ==========

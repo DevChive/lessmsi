@@ -22,9 +22,12 @@
 // Authors:
 //	Scott Willeke (scott@willeke.com)
 //
+
+using System;
 using System.Collections;
 using System.IO;
 using Microsoft.Tools.WindowsInstallerXml.Msi;
+using System.Diagnostics;
 
 namespace LessMsi.Msi
 {
@@ -114,14 +117,19 @@ namespace LessMsi.Msi
         {
             string path = this.TargetName;
             MsiDirectory parent = this.Parent;
+
+            if (path == ".")
+            {   //happens in python msi
+                Debug.Assert(parent != null, "Can't have null parent and '.' target directory.");
+                path = parent.GetPath();
+                parent = null;
+            }
+            
             while (parent != null)
             {
                 //Sometimes parent is a '.' In this case, the files should be directly put into the parent of the parent. See http://msdn.microsoft.com/en-us/library/aa368295%28VS.85%29.aspx
                 if (parent.TargetName != ".")
-                {
                     path = Path.Combine(parent.TargetName, path);
-                }
-				
                 parent = parent.Parent;
             }
             return path;
@@ -190,7 +198,12 @@ namespace LessMsi.Msi
             ArrayList rootDirectoriesList = new ArrayList();
             foreach (MsiDirectory dir in directoriesByDirID.Values)
             {
-                if (dir.DirectoryParent == null || dir.DirectoryParent.Length == 0)
+				// If the value of the Directory_Parent column is null...
+	            var isRoot = string.IsNullOrEmpty(dir.DirectoryParent);
+				//  ...or is equal to the Directory column, the DefaultDir column specifies the name of a root source directory. - https://msdn.microsoft.com/en-us/library/windows/desktop/aa368295(v=vs.85).aspx
+				if (!isRoot && string.Equals(dir.Directory, dir.DirectoryParent, StringComparison.InvariantCulture))
+					isRoot = true;
+				if (isRoot)
                 {
                     rootDirectoriesList.Add(dir);
                     continue;
